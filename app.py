@@ -21,8 +21,12 @@ class statUI(QMainWindow):
         self.data2 = []
         self.openFileFirst.clicked.connect(self.first_file_load_signal)
         self.openFileSecond.clicked.connect(self.second_file_load_signal)
-        self.calculateButton.clicked.connect(self.define_samples_type)
-        self.calculateButton.clicked.connect(self.calculate_test)
+        self.calculateButton.clicked.connect(self.define_sample_type_and_calculate_test)
+
+    def define_sample_type_and_calculate_test(self):
+        if (self.define_samples_type() != None):
+            self.calculate_test()
+
 
     def load_text_file(widget):
         filter = 'Текстовые файлы (*.txt);; Все файлы (*.*)'
@@ -64,17 +68,25 @@ class statUI(QMainWindow):
         filename = QFileDialog.getOpenFileName(self, 'Выберите файл', filter=filter)
 
         if filename[0] != '':
-            data = self.parse_sample_file(filename[0])
+            try:
+                data = self.parse_sample_file(filename[0])
+            except ValueError as err:
+                QMessageBox.warning(self, 'Ошибка!', str(err))
+                return None
             self.data1 = np.array(data)
             self.selectedFileFirst.setText(filename[0])
 
 
     def second_file_load_signal(self):
-        filter = 'Текстовые файлы (*.txt);; Все файлы (*.*)'
+        filter = 'Текстовые файлы (*.txt); Все файлы (*.*)'
         filename = QFileDialog.getOpenFileName(self, 'Выберите файл', filter=filter)
 
         if filename[0] != '':
-            data = self.parse_sample_file(filename[0])
+            try:
+                data = self.parse_sample_file(filename[0])
+            except ValueError as err:
+                QMessageBox.warning(self, 'Ошибка!', str(err))
+                return None
             self.data2 = np.array(data)
             self.selectedFileSecond.setText(filename[0])
 
@@ -101,6 +113,8 @@ class statUI(QMainWindow):
         else:
             self.secondSampleDistributed.setText('ненормально')
 
+        return 1
+
 
     def distribution_normal(self, data = ()):
         if len(data) == 0:
@@ -124,45 +138,64 @@ class statUI(QMainWindow):
                 return False
 
     def calculate_test(self):
-        self.dependentSamples = self.dependentSamplesCheckbox.isTristate()
+        self.dependentSamples = self.dependentSamplesCheckbox.isChecked()
 
         if self.firstIsNormal and self.secondIsNormal:
             self.typeOfTests.setText('параметрические')
 
             if self.dependentSamples:
-                value = self.calculate_t_Student_for_related()
-                nameOfTest = 'Стьюдент для зависимых'
+                try:
+                    value = self.calculate_t_Student_for_related()
+                    nameOfTest = 't-критерий Стьюдента для зависимых выборок'
+                except ValueError as err:
+                    QMessageBox.warning(self, 'Ошибка!', str(err))
+                    return None
             else:
                 value = self.calculate_t_Student_for_independent()
-                nameOfTest = 'Стьюдент для независимых'
+                nameOfTest = 't-критерий Стьюдента для независимых выборок'
         else:
             self.typeOfTests.setText('непараметрические')
 
             if self.dependentSamples:
-                value = self.calculate_wilcoxon()
-                nameOfTest = 'Вилкоксон'
+                try:
+                    value = self.calculate_wilcoxon()
+                    nameOfTest = 't-критерий Вилкоксона'
+                except ValueError as err:
+                    QMessageBox.warning(self, 'Ошибка!', str(err))
+                    return None
             else:
                 value = self.calculate_mannwhitneyu()
-                nameOfTest = 'Манна-Уитни'
+                nameOfTest = 'критерий Манна-Уитни'
 
         self.resultOfTest.setValue(value)
         self.testName.setText(nameOfTest)
 
     def calculate_t_Student_for_related(self):
+        if len(self.data1) != len(self.data2):
+            raise ValueError('Невозможно выполнить тест "t-критерий Стьюдента для зависимых выборок", так как ' +
+                             'размеры выборок не совпадают: в первой выборке содержится ' + str(len(self.data1)) +
+                             ' элементов, в то время как во второй ' + str(len(self.data2)) + ' элементов')
+
         stat, p = ttest_rel(self.data1, self.data2)
-        return p
+        return stat
 
     def calculate_t_Student_for_independent(self):
         stat, p = ttest_ind(self.data1, self.data2)
-        return p
+        return stat
 
     def calculate_mannwhitneyu(self):
         stat, p = mannwhitneyu(self.data1, self.data2)
-        return p
+        return stat
 
     def calculate_wilcoxon(self):
+        if len(self.data1) != len(self.data2):
+            raise ValueError('Невозможно выполнить тест "t-критерий Вилкоксона", так как ' +
+                             'размеры выборок не совпадают: в первой выборке содержится ' + str(len(self.data1)) +
+                             ' элементов, в то время как во второй ' + str(len(self.data2)) + ' элементов')
+
         stat, p = wilcoxon(self.data1, self.data2)
-        return p
+        return stat
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
