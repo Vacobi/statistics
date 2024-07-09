@@ -18,8 +18,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>583</width>
-     <height>258</height>
+     <width>1109</width>
+     <height>410</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -38,6 +38,18 @@
        </widget>
       </item>
       <item>
+       <widget class="QLabel" name="selectedFileFirst">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Файл с первой выборкой не выбран  </string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -49,18 +61,6 @@
          </size>
         </property>
        </spacer>
-      </item>
-      <item>
-       <widget class="QLabel" name="selectedFileFirst">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Файл с первой выборкой не выбран  </string>
-        </property>
-       </widget>
       </item>
      </layout>
     </item>
@@ -79,6 +79,18 @@
        </widget>
       </item>
       <item>
+       <widget class="QLabel" name="selectedFileSecond">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Файл со второй выборкой не выбран</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer_1">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -91,19 +103,20 @@
         </property>
        </spacer>
       </item>
-      <item>
-       <widget class="QLabel" name="selectedFileSecond">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Файл со второй выборкой не выбран</string>
-        </property>
-       </widget>
-      </item>
      </layout>
+    </item>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
     </item>
     <item>
      <widget class="QCheckBox" name="dependentSamplesCheckbox">
@@ -113,9 +126,34 @@
        </font>
       </property>
       <property name="text">
-       <string>Выборки зависимы?</string>
+       <string>Выборки зависимы? (Выборки являются зависимыми, когда речь идет об </string>
       </property>
      </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_7">
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string> одной группе испытуемых до и после эксперементального воздействия)</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -127,7 +165,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Первая выборка распределена </string>
+         <string>Первая выборка распределена</string>
         </property>
        </widget>
       </item>
@@ -136,6 +174,7 @@
         <property name="font">
          <font>
           <pointsize>12</pointsize>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -168,7 +207,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Вторая выборка распределена </string>
+         <string>Вторая выборка распределена</string>
         </property>
        </widget>
       </item>
@@ -177,6 +216,7 @@
         <property name="font">
          <font>
           <pointsize>12</pointsize>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -200,6 +240,19 @@
      </layout>
     </item>
     <item>
+     <spacer name="verticalSpacer_3">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
        <widget class="QLabel" name="label_3">
@@ -209,7 +262,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Для данных выборок подходят </string>
+         <string>Для данных выборок подходят</string>
         </property>
        </widget>
       </item>
@@ -218,6 +271,7 @@
         <property name="font">
          <font>
           <pointsize>12</pointsize>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -262,12 +316,18 @@
          </font>
         </property>
         <property name="text">
-         <string>Тест </string>
+         <string>Статистика теста</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="testName">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -292,6 +352,15 @@
           <pointsize>12</pointsize>
          </font>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="minimum">
+         <double>-10000000000000000466018071748206975684050858099493768614209804580186827813230862995727677122141957123210339765959854898653172616660068980913606220974926434405874301273673162218994872058950552383264597357715602427843549593600.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>1000000000000000023093091302697871548929838224851699275430564578154842189679457688865761796867950761110782385438258574196599190113135873506876029716653690185712031431446635648758966669803520.000000000000000</double>
+        </property>
        </widget>
       </item>
       <item>
@@ -308,6 +377,90 @@
        </spacer>
       </item>
      </layout>
+    </item>
+    <item>
+     <widget class="QLabel" name="description">
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_8">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Вероятность:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDoubleSpinBox" name="probability">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="minimum">
+         <double>-100000000000000001097906362944045541740492309677311846336810682903157585404911491537163328978494688899061249669721172515611590283743140088328307009198146046031271664502933027185697489699588559043338384466165001178426897626212945177628091195786707458122783970171784415105291802893207873272974885715430223118336.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>100000000000000009283347037202319909689034845245050771098451388126923428081969579920029641209088262542943126809822773697747226137851076470969547585887373208135923963504986275470907025292240033962037948280174037505158080469401600.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_6">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QLabel" name="hypoteses_result">
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_4">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
     </item>
     <item>
      <widget class="QPushButton" name="calculateButton">

@@ -146,29 +146,48 @@ class statUI(QMainWindow):
             if self.dependentSamples:
                 try:
                     value = self.calculate_t_Student_for_related()
+                    resultOfTest = value.statistic
                     nameOfTest = 't-критерий Стьюдента для зависимых выборок'
+                    text_description = '(используется для определения статистической значимости различий средних величин)'
+                    null_hypotes = '(нулевая гипотеза предполагает, что средние значения распределений, лежащих в основе выборок, равны)'
                 except ValueError as err:
                     QMessageBox.warning(self, 'Ошибка!', str(err))
                     return None
             else:
                 value = self.calculate_t_Student_for_independent()
+                resultOfTest = value.statistic
                 nameOfTest = 't-критерий Стьюдента для независимых выборок'
+                text_description = '(используется для определения статистической значимости различий средних величин)'
+                null_hypotes = '(нулевая гипотеза предполагает, что средние значения распределений, лежащих в основе выборок, равны)'
         else:
             self.typeOfTests.setText('непараметрические')
 
             if self.dependentSamples:
                 try:
                     value = self.calculate_wilcoxon()
+                    resultOfTest = value.statistic
                     nameOfTest = 't-критерий Вилкоксона'
+                    text_description = '(используется для оценки различий между двумя рядами измерений)'
+                    null_hypotes = '(нулевая гипотеза предполагает, что медианы разностей равны нулю, то есть нет значимых различий между выборками)'
                 except ValueError as err:
                     QMessageBox.warning(self, 'Ошибка!', str(err))
                     return None
             else:
                 value = self.calculate_mannwhitneyu()
+                resultOfTest = len(self.data1) * len(self.data2) - value.statistic
                 nameOfTest = 'критерий Манна-Уитни'
+                text_description = '(используется для оценки различий между двумя независимыми выборками по уровню какого-либо признака, измеренного количественно)'
+                null_hypotes = '(нулевая гипотеза предполагает, что распределения приблизительно равны)'
 
-        self.resultOfTest.setValue(value)
+        self.resultOfTest.setValue(resultOfTest)
+        self.probability.setValue(value.pvalue)
         self.testName.setText(nameOfTest)
+        self.description.setText(text_description)
+
+        if (value.pvalue > 0.05):
+            self.hypoteses_result.setText('Нулевая гипотеза принимается ' + null_hypotes)
+        else:
+            self.hypoteses_result.setText('Нулевая гипотеза отвергается ' + null_hypotes)
 
     def calculate_t_Student_for_related(self):
         if len(self.data1) != len(self.data2):
@@ -176,16 +195,13 @@ class statUI(QMainWindow):
                              'размеры выборок не совпадают: в первой выборке содержится ' + str(len(self.data1)) +
                              ' элементов, в то время как во второй ' + str(len(self.data2)) + ' элементов')
 
-        stat, p = ttest_rel(self.data1, self.data2)
-        return stat
+        return ttest_rel(self.data1, self.data2)
 
     def calculate_t_Student_for_independent(self):
-        stat, p = ttest_ind(self.data1, self.data2)
-        return stat
+        return ttest_ind(self.data1, self.data2)
 
     def calculate_mannwhitneyu(self):
-        stat, p = mannwhitneyu(self.data1, self.data2)
-        return stat
+        return mannwhitneyu(self.data1, self.data2)
 
     def calculate_wilcoxon(self):
         if len(self.data1) != len(self.data2):
@@ -193,8 +209,7 @@ class statUI(QMainWindow):
                              'размеры выборок не совпадают: в первой выборке содержится ' + str(len(self.data1)) +
                              ' элементов, в то время как во второй ' + str(len(self.data2)) + ' элементов')
 
-        stat, p = wilcoxon(self.data1, self.data2)
-        return stat
+        return wilcoxon(self.data1, self.data2)
 
 
 if __name__ == '__main__':
